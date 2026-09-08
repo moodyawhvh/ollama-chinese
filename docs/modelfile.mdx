@@ -1,53 +1,51 @@
 ---
-title: Modelfile Reference
+title: Modelfile 参考
 ---
 
-A Modelfile is the blueprint to create and share customized models using Ollama.
+> 🌐 本文档由 [ollama/ollama](https://github.com/ollama/ollama) 翻译,英文原版见原项目。
 
-## Table of Contents
+Modelfile 是用 Ollama 创建和分享自定义模型的蓝图。
 
-- [Format](#format)
-- [Examples](#examples)
-- [Instructions](#instructions)
-  - [FROM (Required)](#from-required)
-    - [Build from existing model](#build-from-existing-model)
-    - [Build from a Safetensors model](#build-from-a-safetensors-model)
-    - [Build from a GGUF file](#build-from-a-gguf-file)
+## 目录
+
+- [格式](#格式)
+- [示例](#示例)
+- [指令](#指令)
+  - [FROM(必需)](#from必需)
   - [PARAMETER](#parameter)
-    - [Valid Parameters and Values](#valid-parameters-and-values)
   - [TEMPLATE](#template)
-    - [Template Variables](#template-variables)
   - [SYSTEM](#system)
   - [ADAPTER](#adapter)
   - [LICENSE](#license)
   - [MESSAGE](#message)
-- [Notes](#notes)
+  - [REQUIRES](#requires)
+- [注意事项](#注意事项)
 
-## Format
+## 格式
 
-The format of the `Modelfile`:
+`Modelfile` 的格式:
 
 ```
 # comment
 INSTRUCTION arguments
 ```
 
-| Instruction                         | Description                                                    |
+| 指令                                | 说明                                       |
 | ----------------------------------- | -------------------------------------------------------------- |
-| [`FROM`](#from-required) (required) | Defines the base model to use.                                 |
-| [`PARAMETER`](#parameter)           | Sets the parameters for how Ollama will run the model.         |
-| [`TEMPLATE`](#template)             | The full prompt template to be sent to the model.              |
-| [`SYSTEM`](#system)                 | Specifies the system message that will be set in the template. |
-| [`ADAPTER`](#adapter)               | Defines the (Q)LoRA adapters to apply to the model.            |
-| [`LICENSE`](#license)               | Specifies the legal license.                                   |
-| [`MESSAGE`](#message)               | Specify message history.                                       |
-| [`REQUIRES`](#requires)             | Specify the minimum version of Ollama required by the model.   |
+| [`FROM`](#from必需)(必需)          | 定义要使用的基座模型。                 |
+| [`PARAMETER`](#parameter)           | 设置 Ollama 运行模型时的参数。         |
+| [`TEMPLATE`](#template)             | 发送给模型的完整提示词模板。              |
+| [`SYSTEM`](#system)                 | 指定写入模板中的系统消息。 |
+| [`ADAPTER`](#adapter)               | 定义要应用到模型上的 (Q)LoRA 适配器。            |
+| [`LICENSE`](#license)               | 指定法律许可证。                                   |
+| [`MESSAGE`](#message)               | 指定消息历史。                                       |
+| [`REQUIRES`](#requires)             | 指定模型要求的 Ollama 最低版本。   |
 
-## Examples
+## 示例
 
-### Basic `Modelfile`
+### 基础 `Modelfile`
 
-An example of a `Modelfile` creating a mario blueprint:
+一个创建 mario 蓝图的 `Modelfile` 示例:
 
 ```
 FROM llama3.2
@@ -60,14 +58,14 @@ PARAMETER num_ctx 4096
 SYSTEM You are Mario from super mario bros, acting as an assistant.
 ```
 
-To use this:
+使用方法:
 
-1. Save it as a file (e.g. `Modelfile`)
+1. 把它保存为文件(例如 `Modelfile`)
 2. `ollama create choose-a-model-name -f <location of the file e.g. ./Modelfile>`
 3. `ollama run choose-a-model-name`
-4. Start using the model!
+4. 开始使用模型!
 
-To view the Modelfile of a given model, use the `ollama show --modelfile` command.
+查看某个模型的 Modelfile,使用 `ollama show --modelfile` 命令。
 
 ```shell
 ollama show --modelfile llama3.2
@@ -91,17 +89,17 @@ PARAMETER stop "<|eot_id|>"
 PARAMETER stop "<|reserved_special_token"
 ```
 
-## Instructions
+## 指令
 
-### FROM (Required)
+### FROM(必需)
 
-The `FROM` instruction defines the base model to use when creating a model.
+`FROM` 指令定义创建模型时要使用的基座模型。
 
 ```
 FROM <model name>:<tag>
 ```
 
-#### Build from existing model
+#### 从现有模型构建
 
 ```
 FROM llama3.2
@@ -111,64 +109,64 @@ FROM llama3.2
   Browse available models
 </Card>
 
-#### Build from a Safetensors model
+#### 从 Safetensors 模型构建
 
 ```
 FROM <model directory>
 ```
 
-The model directory should contain the Safetensors weights for a supported architecture.
+模型目录中应包含受支持架构的 Safetensors 权重。
 
-Currently supported model architectures:
+当前支持的模型架构:
 
-- Llama (including Llama 2, Llama 3, Llama 3.1, and Llama 3.2)
-- Mistral (including Mistral 1, Mistral 2, and Mixtral)
-- Gemma (including Gemma 1 and Gemma 2)
+- Llama(包括 Llama 2、Llama 3、Llama 3.1 和 Llama 3.2)
+- Mistral(包括 Mistral 1、Mistral 2 和 Mixtral)
+- Gemma(包括 Gemma 1 和 Gemma 2)
 - Phi3
 
-#### Build from a GGUF file
+#### 从 GGUF 文件构建
 
 ```
 FROM ./ollama-model.gguf
 ```
 
-The GGUF file location should be specified as an absolute path or relative to the `Modelfile` location.
+GGUF 文件位置应使用绝对路径,或相对于 `Modelfile` 所在位置的路径。
 
 ### PARAMETER
 
-The `PARAMETER` instruction defines a parameter that can be set when the model is run.
+`PARAMETER` 指令定义模型运行时可以设置的参数。
 
 ```
 PARAMETER <parameter> <parametervalue>
 ```
 
-#### Valid Parameters and Values
+#### 有效参数与取值
 
-| Parameter      | Description                                                                                                                                                                                                                                                                                                                                                                     | Value Type | Example Usage        |
+| 参数           | 说明                                                                                                                                                                                                                                                                                                                                                                            | 取值类型 | 示例                 |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | -------------------- |
-| num_ctx        | Sets the size of the context window used to generate the next token. (Default: 2048)                                                                                                                                                                                                                                                                                            | int        | num_ctx 4096         |
-| repeat_last_n  | Sets how far back for the model to look back to prevent repetition. (Default: 64, 0 = disabled, -1 = num_ctx)                                                                                                                                                                                                                                                                   | int        | repeat_last_n 64     |
-| repeat_penalty | Sets how strongly to penalize repetitions. A higher value (e.g., 1.5) will penalize repetitions more strongly, while a lower value (e.g., 0.9) will be more lenient. (Default: 1.0, disabled)                                                                                                                                                                                   | float      | repeat_penalty 1.1   |
-| temperature    | The temperature of the model. Increasing the temperature will make the model answer more creatively. (Default: 0.8)                                                                                                                                                                                                                                                             | float      | temperature 0.7      |
-| seed           | Sets the random number seed to use for generation. Setting this to a specific number will make the model generate the same text for the same prompt. (Default: 0)                                                                                                                                                                                                               | int        | seed 42              |
-| stop           | Sets the stop sequences to use. When this pattern is encountered the LLM will stop generating text and return. Multiple stop patterns may be set by specifying multiple separate `stop` parameters in a modelfile.                                                                                                                                                              | string     | stop "AI assistant:" |
-| num_predict    | Maximum number of tokens to predict when generating text. (Default: -1, infinite generation)                                                                                                                                                                                                                                                                                    | int        | num_predict 42       |
-| draft_num_predict | Maximum number of speculative draft tokens to predict per step when a draft model is available. Separate draft models default to 4; embedded MTP tensors require setting this parameter. Set to 0 to disable speculative drafting.                                                                                                                                               | int        | draft_num_predict 4  |
-| top_k          | Reduces the probability of generating nonsense. A higher value (e.g. 100) will give more diverse answers, while a lower value (e.g. 10) will be more conservative. (Default: 40)                                                                                                                                                                                                | int        | top_k 40             |
-| top_p          | Works together with top-k. A higher value (e.g., 0.95) will lead to more diverse text, while a lower value (e.g., 0.5) will generate more focused and conservative text. (Default: 0.9)                                                                                                                                                                                         | float      | top_p 0.9            |
-| min_p          | Alternative to the top*p, and aims to ensure a balance of quality and variety. The parameter \_p* represents the minimum probability for a token to be considered, relative to the probability of the most likely token. For example, with _p_=0.05 and the most likely token having a probability of 0.9, logits with a value less than 0.045 are filtered out. (Default: 0.0) | float      | min_p 0.05           |
+| num_ctx        | 设置用于生成下一个 token 的上下文窗口大小。(默认:2048)                                                                                                                                                                                                                                                                                           | int        | num_ctx 4096         |
+| repeat_last_n  | 设置模型回看多少个 token 来防止重复。(默认:64,0 = 禁用,-1 = num_ctx)                                                                                                                                                                                                                                                                   | int        | repeat_last_n 64     |
+| repeat_penalty | 设置对重复内容的惩罚强度。值越高(如 1.5)惩罚越重,值越低(如 0.9)越宽容。(默认:1.0,即禁用)                                                                                                                                                                                                                   | float      | repeat_penalty 1.1   |
+| temperature    | 模型的温度。提高温度会让模型的回答更有创造性。(默认:0.8)                                                                                                                                                                                                                                                              | float      | temperature 0.7      |
+| seed           | 设置生成时使用的随机数种子。设定为固定数字后,相同提示词会让模型生成相同的文本。(默认:0)                                                                                                                                                                                                                | int        | seed 42              |
+| stop           | 设置停止序列。遇到该模式时 LLM 会停止生成并返回。可在 Modelfile 中指定多个独立的 `stop` 参数来设置多个停止模式。                                                                                                                                                 | string     | stop "AI assistant:" |
+| num_predict    | 生成文本时最多预测的 token 数。(默认:-1,无限生成)                                                                                                                                                                                                                                                                                    | int        | num_predict 42       |
+| draft_num_predict | 存在草稿模型(draft model)时,每步最多预测的投机草稿 token 数。独立草稿模型默认为 4;内嵌 MTP 张量则需要显式设置此参数。设为 0 可禁用投机草稿。                                                                                                                                               | int        | draft_num_predict 4  |
+| top_k          | 降低生成无意义内容的概率。值越高(如 100)答案越多样,值越低(如 10)越保守。(默认:40)                                                                                                                                                                                                 | int        | top_k 40             |
+| top_p          | 与 top-k 配合工作。值越高(如 0.95)文本越发散,值越低(如 0.5)文本越聚焦保守。(默认:0.9)                                                                                                                                                               | float      | top_p 0.9            |
+| min_p          | top_p 的替代方案,旨在兼顾质量与多样性。参数 \_p* 表示一个 token 被纳入考虑的最低相对概率(相对于最可能 token 的概率)。例如 _p_=0.05 且最可能 token 的概率为 0.9 时,logit 值低于 0.045 的候选会被过滤掉。(默认:0.0) | float      | min_p 0.05           |
 
 ### TEMPLATE
 
-`TEMPLATE` of the full prompt template to be passed into the model. It may include (optionally) a system message, a user's message and the response from the model. Note: syntax may be model specific. Templates use Go [template syntax](https://pkg.go.dev/text/template).
+`TEMPLATE` 是传给模型的完整提示词模板。它可以(可选地)包含系统消息、用户消息和模型的回复。注意:语法可能因模型而异。模板使用 Go 的[模板语法](https://pkg.go.dev/text/template)。
 
-#### Template Variables
+#### 模板变量
 
-| Variable          | Description                                                                                   |
+| 变量              | 说明                                                                                   |
 | ----------------- | --------------------------------------------------------------------------------------------- |
-| `{{ .System }}`   | The system message used to specify custom behavior.                                           |
-| `{{ .Prompt }}`   | The user prompt message.                                                                      |
-| `{{ .Response }}` | The response from the model. When generating a response, text after this variable is omitted. |
+| `{{ .System }}`   | 用于指定自定义行为的系统消息。                                           |
+| `{{ .Prompt }}`   | 用户的提示词消息。                                                                      |
+| `{{ .Response }}` | 模型的回复。生成回复时,该变量之后的文本会被省略。 |
 
 ```
 TEMPLATE """{{ if .System }}<|im_start|>system
@@ -181,7 +179,7 @@ TEMPLATE """{{ if .System }}<|im_start|>system
 
 ### SYSTEM
 
-The `SYSTEM` instruction specifies the system message to be used in the template, if applicable.
+`SYSTEM` 指令指定模板中使用的系统消息(如适用)。
 
 ```
 SYSTEM """<system message>"""
@@ -189,21 +187,21 @@ SYSTEM """<system message>"""
 
 ### ADAPTER
 
-The `ADAPTER` instruction specifies a fine tuned LoRA adapter that should apply to the base model. The value of the adapter should be an absolute path or a path relative to the Modelfile. The base model should be specified with a `FROM` instruction. If the base model is not the same as the base model that the adapter was tuned from the behaviour will be erratic.
+`ADAPTER` 指令指定要应用到基座模型上的微调 LoRA 适配器。适配器的取值应为绝对路径,或相对于 Modelfile 的路径。基座模型必须用 `FROM` 指令指定。如果基座模型与适配器调优时使用的基座模型不一致,模型行为会不稳定。
 
-#### Safetensor adapter
+#### Safetensor 适配器
 
 ```
 ADAPTER <path to safetensor adapter>
 ```
 
-Currently supported Safetensor adapters:
+当前支持的 Safetensor 适配器:
 
-- Llama (including Llama 2, Llama 3, and Llama 3.1)
-- Mistral (including Mistral 1, Mistral 2, and Mixtral)
-- Gemma (including Gemma 1 and Gemma 2)
+- Llama(包括 Llama 2、Llama 3 和 Llama 3.1)
+- Mistral(包括 Mistral 1、Mistral 2 和 Mixtral)
+- Gemma(包括 Gemma 1 和 Gemma 2)
 
-#### GGUF adapter
+#### GGUF 适配器
 
 ```
 ADAPTER ./ollama-lora.gguf
@@ -211,7 +209,7 @@ ADAPTER ./ollama-lora.gguf
 
 ### LICENSE
 
-The `LICENSE` instruction allows you to specify the legal license under which the model used with this Modelfile is shared or distributed.
+`LICENSE` 指令用于指定本 Modelfile 所用模型的共享或分发许可证。
 
 ```
 LICENSE """
@@ -221,21 +219,21 @@ LICENSE """
 
 ### MESSAGE
 
-The `MESSAGE` instruction allows you to specify a message history for the model to use when responding. Use multiple iterations of the MESSAGE command to build up a conversation which will guide the model to answer in a similar way.
+`MESSAGE` 指令允许你为模型指定回答时使用的消息历史。通过多条 MESSAGE 命令构建一段对话,引导模型以类似的方式回答。
 
 ```
 MESSAGE <role> <message>
 ```
 
-#### Valid roles
+#### 有效角色
 
-| Role      | Description                                                  |
+| 角色      | 说明                                                  |
 | --------- | ------------------------------------------------------------ |
-| system    | Alternate way of providing the SYSTEM message for the model. |
-| user      | An example message of what the user could have asked.        |
-| assistant | An example message of how the model should respond.          |
+| system    | 为模型提供 SYSTEM 消息的另一种方式。 |
+| user      | 用户可能会提出的问题示例。        |
+| assistant | 模型应如何回答的示例消息。          |
 
-#### Example conversation
+#### 对话示例
 
 ```
 MESSAGE user Is Toronto in Canada?
@@ -248,17 +246,17 @@ MESSAGE assistant yes
 
 ### REQUIRES
 
-The `REQUIRES` instruction allows you to specify the minimum version of Ollama required by the model.
+`REQUIRES` 指令允许你指定模型要求的 Ollama 最低版本。
 
 ```
 REQUIRES <version>
 ```
 
-The version should be a valid Ollama version (e.g. 0.14.0).
+版本号应为有效的 Ollama 版本(例如 0.14.0)。
 
-## Notes
+## 注意事项
 
-- the **`Modelfile` is not case sensitive**. In the examples, uppercase instructions are used to make it easier to distinguish it from arguments.
-- Instructions can be in any order. In the examples, the `FROM` instruction is first to keep it easily readable.
+- **`Modelfile` 不区分大小写**。示例中使用大写指令,是为了更容易与参数区分。
+- 指令可以按任意顺序排列。示例中把 `FROM` 放在最前面是为了便于阅读。
 
 [1]: https://ollama.com/library
