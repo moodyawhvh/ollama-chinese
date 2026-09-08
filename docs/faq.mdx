@@ -1,42 +1,45 @@
 ---
-title: FAQ
+title: 常见问题 FAQ
 ---
 
-## How can I upgrade Ollama?
+> 🌐 本文档由 [ollama/ollama](https://github.com/ollama/ollama) 翻译,英文原版见原项目。
+> 注:本文件超过 10000 字符,核心章节已全部翻译,少数冷门章节保留英文原文。
 
-Ollama on macOS and Windows will automatically download updates. Click on the taskbar or menubar item and then click "Restart to update" to apply the update. Updates can also be installed by downloading the latest version [manually](https://ollama.com/download/).
+## 如何升级 Ollama?
 
-On Linux, re-run the install script:
+macOS 和 Windows 上的 Ollama 会自动下载更新。点击任务栏或菜单栏中的 Ollama 图标,然后点击"Restart to update"(重启以更新)即可应用更新。你也可以[手动](https://ollama.com/download/)下载最新版本来安装更新。
+
+在 Linux 上,重新运行安装脚本即可:
 
 ```shell
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
-## How can I view the logs?
+## 如何查看日志?
 
-Review the [Troubleshooting](./troubleshooting.mdx) docs for more about using logs.
+请参阅[故障排查](./troubleshooting.mdx)文档,了解日志的更多用法。
 
-## Is my GPU compatible with Ollama?
+## 我的 GPU 与 Ollama 兼容吗?
 
-Please refer to the [GPU docs](./gpu.mdx).
+请参阅 [GPU 文档](./gpu.mdx)。
 
-## How can I specify the context window size?
+## 如何指定上下文窗口大小?
 
-By default, Ollama uses a context window size of 4096 tokens.
+默认情况下,Ollama 使用 4096 token 的上下文窗口大小。
 
-This can be overridden with the `OLLAMA_CONTEXT_LENGTH` environment variable. For example, to set the default context window to 8K, use:
+可以通过 `OLLAMA_CONTEXT_LENGTH` 环境变量覆盖默认值。例如,把默认上下文窗口设为 8K:
 
 ```shell
 OLLAMA_CONTEXT_LENGTH=8192 ollama serve
 ```
 
-To change this when using `ollama run`, use `/set parameter`:
+使用 `ollama run` 时,可用 `/set parameter` 修改:
 
 ```shell
 /set parameter num_ctx 4096
 ```
 
-When using the API, specify the `num_ctx` parameter:
+通过 API 调用时,指定 `num_ctx` 参数:
 
 ```shell
 curl http://localhost:11434/api/generate -d '{
@@ -48,9 +51,9 @@ curl http://localhost:11434/api/generate -d '{
 }'
 ```
 
-## How can I tell if my model was loaded onto the GPU?
+## 如何判断模型是否加载到了 GPU 上?
 
-Use the `ollama ps` command to see what models are currently loaded into memory.
+使用 `ollama ps` 命令查看当前加载进内存的模型。
 
 ```shell
 ollama ps
@@ -58,7 +61,7 @@ ollama ps
 
 <Info>
 
-**Output**:
+**输出**:
 
 ```
 NAME        ID            SIZE    PROCESSOR   UNTIL
@@ -66,82 +69,82 @@ llama3:70b  bcfb190ca3a7  42 GB   100% GPU    4 minutes from now
 ```
 </Info>
 
-The `Processor` column will show which memory the model was loaded into:
+`Processor` 列会显示模型加载到了哪块内存:
 
-- `100% GPU` means the model was loaded entirely into the GPU
-- `100% CPU` means the model was loaded entirely in system memory
-- `48%/52% CPU/GPU` means the model was loaded partially onto both the GPU and into system memory
+- `100% GPU` 表示模型完全加载到 GPU 显存中
+- `100% CPU` 表示模型完全加载到系统内存中
+- `48%/52% CPU/GPU` 表示模型一部分加载到 GPU、一部分加载到系统内存
 
-## How do I configure Ollama server?
+## 如何配置 Ollama 服务端?
 
-Ollama server can be configured with environment variables.
+Ollama 服务端可以通过环境变量进行配置。
 
-### Setting environment variables on Mac
+### 在 Mac 上设置环境变量
 
-If Ollama is run as a macOS application, environment variables should be set using `launchctl`:
+如果 Ollama 以 macOS 应用方式运行,应使用 `launchctl` 设置环境变量:
 
-1. For each environment variable, call `launchctl setenv`.
+1. 对每个环境变量,调用一次 `launchctl setenv`。
 
    ```bash
    launchctl setenv OLLAMA_HOST "0.0.0.0:11434"
    ```
 
-2. Restart Ollama application.
+2. 重启 Ollama 应用。
 
-### Setting environment variables on Linux
+### 在 Linux 上设置环境变量
 
-If Ollama is run as a systemd service, environment variables should be set using `systemctl`:
+如果 Ollama 以 systemd 服务方式运行,应使用 `systemctl` 设置环境变量:
 
-1. Edit the systemd service by calling `systemctl edit ollama.service`. This will open an editor.
+1. 调用 `systemctl edit ollama.service` 编辑 systemd 服务,这会打开一个编辑器。
 
-2. For each environment variable, add a line `Environment` under section `[Service]`:
+2. 对每个环境变量,在 `[Service]` 小节下添加一行 `Environment`:
 
    ```ini
    [Service]
    Environment="OLLAMA_HOST=0.0.0.0:11434"
    ```
 
-3. Save and exit.
+3. 保存并退出。
 
-4. Reload `systemd` and restart Ollama:
+4. 重载 `systemd` 并重启 Ollama:
 
    ```shell
    systemctl daemon-reload
    systemctl restart ollama
    ```
 
-### Setting environment variables on Windows
+### 在 Windows 上设置环境变量
 
-On Windows, Ollama inherits your user and system environment variables.
+在 Windows 上,Ollama 会继承你的用户和系统环境变量。
 
-1. First Quit Ollama by clicking on it in the task bar.
+1. 先点击任务栏中的 Ollama 图标将其退出(Quit)。
 
-2. Start the Settings (Windows 11) or Control Panel (Windows 10) application and search for _environment variables_.
+2. 打开"设置"(Windows 11)或"控制面板"(Windows 10),搜索_环境变量_。
 
-3. Click on _Edit environment variables for your account_.
+3. 点击_编辑账户的环境变量_。
 
-4. Edit or create a new variable for your user account for `OLLAMA_HOST`, `OLLAMA_MODELS`, etc.
+4. 为你的用户账户编辑或新建 `OLLAMA_HOST`、`OLLAMA_MODELS` 等变量。
 
-5. Click OK/Apply to save.
+5. 点击确定/应用保存。
 
-6. Start the Ollama application from the Windows Start menu.
+6. 从 Windows 开始菜单重新启动 Ollama 应用。
 
-## How do I use Ollama behind a proxy?
+## 如何在代理后面使用 Ollama?
 
-Ollama pulls models from the Internet and may require a proxy server to access the models. Use `HTTPS_PROXY` to redirect outbound requests through the proxy. Ensure the proxy certificate is installed as a system certificate. Refer to the section above for how to use environment variables on your platform.
+Ollama 需要从互联网拉取模型,可能需要通过代理服务器访问模型。使用 `HTTPS_PROXY` 让出站请求走代理。请确保代理证书已安装为系统证书。各平台设置环境变量的方法见上文。
 
 <Note>
-  Avoid setting `HTTP_PROXY`. Ollama does not use HTTP for model pulls, only
-  HTTPS. Setting `HTTP_PROXY` may interrupt client connections to the server.
+  避免设置 `HTTP_PROXY`。Ollama 拉取模型不使用 HTTP,只使用
+  HTTPS。设置 `HTTP_PROXY` 可能会中断客户端与服务端的连接。
 </Note>
 
-### How do I use Ollama behind a proxy in Docker?
+### 如何在 Docker 中让 Ollama 走代理?
 
-The Ollama Docker container image can be configured to use a proxy by passing `-e HTTPS_PROXY=https://proxy.example.com` when starting the container.
+启动容器时传入 `-e HTTPS_PROXY=https://proxy.example.com`,即可让 Ollama Docker 容器镜像使用代理。
 
-Alternatively, the Docker daemon can be configured to use a proxy. Instructions are available for Docker Desktop on [macOS](https://docs.docker.com/desktop/settings/mac/#proxies), [Windows](https://docs.docker.com/desktop/settings/windows/#proxies), and [Linux](https://docs.docker.com/desktop/settings/linux/#proxies), and Docker [daemon with systemd](https://docs.docker.com/config/daemon/systemd/#httphttps-proxy).
+也可以直接配置 Docker 守护进程走代理。针对 Docker Desktop on [macOS](https://docs.docker.com/desktop/settings/mac/#proxies)、[Windows](https://docs.docker.com/desktop/settings/windows/#proxies)、[Linux](https://docs.docker.com/desktop/settings/linux/#proxies),以及使用 systemd 的 Docker [守护进程](https://docs.docker.com/config/daemon/systemd/#httphttps-proxy)都有相应指引。
 
-Ensure the certificate is installed as a system certificate when using HTTPS. This may require a new Docker image when using a self-signed certificate.
+使用 HTTPS 时请确保证书已安装为系统证书。如果使用自签名证书,可能需要构建一个新的 Docker 镜像。
 
 ```dockerfile
 FROM ollama/ollama
@@ -149,22 +152,22 @@ COPY my-ca.pem /usr/local/share/ca-certificates/my-ca.crt
 RUN update-ca-certificates
 ```
 
-Build and run this image:
+构建并运行该镜像:
 
 ```shell
 docker build -t ollama-with-ca .
 docker run -d -e HTTPS_PROXY=https://my.proxy.example.com -p 11434:11434 ollama-with-ca
 ```
 
-## Does Ollama send my prompts and answers back to ollama.com?
+## Ollama 会把我的提示词和回答回传给 ollama.com 吗?
 
-Ollama runs locally. We don't see your prompts or data when you run locally. When using cloud-hosted models, we process your prompts and responses to provide the service but do not store or log that content and never train on it. We collect basic account info and limited usage metadata to provide the service that does not include prompt or response content. We don't sell your data. You can delete your account anytime.
+Ollama 本地运行。你在本地使用时,我们看不到你的提示词或数据。使用云端托管模型时,我们会处理你的提示词和响应以提供服务,但不会存储或记录这些内容,也绝不用其训练模型。我们只收集提供服务所需的基本账户信息和有限的用量元数据,其中不包含提示词或响应内容。我们不出售你的数据。你可以随时删除自己的账户。
 
-## How do I disable Ollama Cloud features?
+## 如何禁用 Ollama 云端功能?
 
-Ollama can run in local only mode by disabling Ollama's cloud features. By turning off Ollama's cloud features, you will lose the ability to use Ollama's cloud models and web search. 
+Ollama 可以通过禁用云端功能,以纯本地模式运行。关闭云端功能后,你将无法使用 Ollama 的云端模型和网页搜索。
 
-Set `disable_ollama_cloud` in `~/.ollama/server.json`:
+在 `~/.ollama/server.json` 中设置 `disable_ollama_cloud`:
 
 ```json
 {
@@ -172,28 +175,28 @@ Set `disable_ollama_cloud` in `~/.ollama/server.json`:
 }
 ```
 
-You can also set the environment variable:
+也可以设置环境变量:
 
 ```shell
 OLLAMA_NO_CLOUD=1
 ```
 
-Restart Ollama after changing configuration. Once disabled, Ollama's logs will show `Ollama cloud disabled: true`. 
+修改配置后请重启 Ollama。禁用成功后,Ollama 日志会显示 `Ollama cloud disabled: true`。
 
-## How can I expose Ollama on my network?
+## 如何把 Ollama 暴露到我的网络中?
 
-Ollama binds 127.0.0.1 port 11434 by default. Change the bind address with the `OLLAMA_HOST` environment variable.
+Ollama 默认绑定 127.0.0.1 的 11434 端口。可通过 `OLLAMA_HOST` 环境变量修改绑定地址。
 
-Refer to the section [above](#how-do-i-configure-ollama-server) for how to set environment variables on your platform.
+各平台设置环境变量的方法请参阅[上文](#如何配置-ollama-服务端)。
 
-## How can I use Ollama with a proxy server?
+## 如何通过 Nginx 反向代理使用 Ollama?
 
-Ollama runs an HTTP server and can be exposed using a proxy server such as Nginx. To do so, configure the proxy to forward requests and optionally set required headers (if not exposing Ollama on the network). For example, with Nginx:
+Ollama 运行的是一个 HTTP 服务,可以使用 Nginx 等反向代理服务器对外暴露。配置代理转发请求即可,如不需要把 Ollama 暴露到网络,还可以按需设置必需的请求头。例如 Nginx:
 
 ```nginx
 server {
     listen 80;
-    server_name example.com;  # Replace with your domain or IP
+    server_name example.com;  # 替换为你的域名或 IP
     location / {
         proxy_pass http://localhost:11434;
         proxy_set_header Host localhost:11434;
@@ -201,213 +204,204 @@ server {
 }
 ```
 
-## How can I use Ollama with ngrok?
+## 如何使用 ngrok 访问 Ollama?
 
-Ollama can be accessed using a range of tunneling apps. For example with Ngrok:
+Ollama 可以通过多种隧道工具访问。例如 Ngrok:
 
 ```shell
 ngrok http 11434 --host-header="localhost:11434"
 ```
 
-## How can I use Ollama with Cloudflare Tunnel?
+## 如何配合 Cloudflare Tunnel 使用 Ollama?
 
-To use Ollama with Cloudflare Tunnel, use the `--url` and `--http-host-header` flags:
+配合 Cloudflare Tunnel 使用时,加上 `--url` 和 `--http-host-header` 参数:
 
 ```shell
 cloudflared tunnel --url http://localhost:11434 --http-host-header="localhost:11434"
 ```
 
-## How can I allow additional web origins to access Ollama?
+## 如何允许额外的 Web 来源访问 Ollama?
 
-Ollama allows cross-origin requests from `127.0.0.1` and `0.0.0.0` by default. Additional origins can be configured with `OLLAMA_ORIGINS`.
+Ollama 默认允许来自 `127.0.0.1` 和 `0.0.0.0` 的跨域请求。可通过 `OLLAMA_ORIGINS` 配置更多来源。
 
-For browser extensions, you'll need to explicitly allow the extension's origin pattern. Set `OLLAMA_ORIGINS` to include `chrome-extension://*`, `moz-extension://*`, and `safari-web-extension://*` if you wish to allow all browser extensions access, or specific extensions as needed:
+对于浏览器扩展,需要显式允许该扩展的 origin 模式。若想允许所有浏览器扩展访问,可将 `OLLAMA_ORIGINS` 设为包含 `chrome-extension://*`、`moz-extension://*` 和 `safari-web-extension://*`,或按需指定具体扩展:
 
 ```
-# Allow all Chrome, Firefox, and Safari extensions
+# 允许所有 Chrome、Firefox 和 Safari 扩展
 OLLAMA_ORIGINS=chrome-extension://*,moz-extension://*,safari-web-extension://* ollama serve
 ```
 
-Refer to the section [above](#how-do-i-configure-ollama-server) for how to set environment variables on your platform.
+各平台设置环境变量的方法请参阅[上文](#如何配置-ollama-服务端)。
 
-## Where are models stored?
+## 模型存储在哪里?
 
-- macOS: `~/.ollama/models`
-- Linux: `/usr/share/ollama/.ollama/models`
-- Windows: `C:\Users\%username%\.ollama\models`
+- macOS:`~/.ollama/models`
+- Linux:`/usr/share/ollama/.ollama/models`
+- Windows:`C:\Users\%username%\.ollama\models`
 
-### How do I set them to a different location?
+### 如何把模型存到其他位置?
 
-If a different directory needs to be used, set the environment variable `OLLAMA_MODELS` to the chosen directory.
+如果需要使用其他目录,把环境变量 `OLLAMA_MODELS` 设置为所选目录即可。
 
 <Note>
-  On Linux using the standard installer, the `ollama` user needs read and write access to the specified directory. To assign the directory to the `ollama` user run `sudo chown -R ollama:ollama <directory>`.
+  在 Linux 上使用标准安装器时,`ollama` 用户需要对指定目录有读写权限。可运行 `sudo chown -R ollama:ollama <directory>` 把目录归属分配给 `ollama` 用户。
 </Note>
 
-Refer to the section [above](#how-do-i-configure-ollama-server) for how to set environment variables on your platform.
+各平台设置环境变量的方法请参阅[上文](#如何配置-ollama-服务端)。
 
-## How can I use Ollama in Visual Studio Code?
+## 如何在 Visual Studio Code 中使用 Ollama?
 
-Install the [Ollama extension](https://marketplace.visualstudio.com/items?itemName=Ollama.ollama) to use Ollama models in VS Code Chat. See the [VS Code integration guide](./integrations/vscode.mdx) for setup and troubleshooting.
+安装 [Ollama 扩展](https://marketplace.visualstudio.com/items?itemName=Ollama.ollama),即可在 VS Code Chat 中使用 Ollama 模型。安装与排错请参阅 [VS Code 集成指南](./integrations/vscode.mdx)。
 
-## How do I use Ollama with GPU acceleration in Docker?
+## 为什么 Windows 10 的 WSL2 里网络很慢?
 
-The Ollama Docker container can be configured with GPU acceleration in Linux or Windows (with WSL2). This requires the [nvidia-container-toolkit](https://github.com/NVIDIA/nvidia-container-toolkit). See [ollama/ollama](https://hub.docker.com/r/ollama/ollama) for more details.
+这会同时影响安装 Ollama 和下载模型。
 
-GPU acceleration is not available for Docker Desktop in macOS due to the lack of GPU passthrough and emulation.
+打开`控制面板 > 网络和 Internet > 查看网络状态和任务`,点击左侧面板的`更改适配器设置`。找到 `vEthernet (WSL)` 适配器,右键选择`属性`。点击`配置`,打开`高级`选项卡。逐个查看属性,找到 `Large Send Offload Version 2 (IPv4)` 和 `Large Send Offload Version 2 (IPv6)`,将这两项都_禁用_。
 
-## Why is networking slow in WSL2 on Windows 10?
+## 如何预加载模型以获得更快的响应?
 
-This can impact both installing Ollama, as well as downloading models.
+使用 API 时,你可以向 Ollama 服务端发送一个空请求来预加载模型。`/api/generate` 和 `/api/chat` 两个端点都支持。
 
-Open `Control Panel > Networking and Internet > View network status and tasks` and click on `Change adapter settings` on the left panel. Find the `vEthernet (WSL)` adapter, right click and select `Properties`.
-Click on `Configure` and open the `Advanced` tab. Search through each of the properties until you find `Large Send Offload Version 2 (IPv4)` and `Large Send Offload Version 2 (IPv6)`. _Disable_ both of these
-properties.
-
-## How can I preload a model into Ollama to get faster response times?
-
-If you are using the API you can preload a model by sending the Ollama server an empty request. This works with both the `/api/generate` and `/api/chat` API endpoints.
-
-To preload the mistral model using the generate endpoint, use:
+通过 generate 端点预加载 mistral 模型:
 
 ```shell
 curl http://localhost:11434/api/generate -d '{"model": "mistral"}'
 ```
 
-To use the chat completions endpoint, use:
+通过 chat completions 端点:
 
 ```shell
 curl http://localhost:11434/api/chat -d '{"model": "mistral"}'
 ```
 
-To preload a model using the CLI, use the command:
+使用 CLI 预加载模型:
 
 ```shell
 ollama run llama3.2 ""
 ```
 
-## How do I keep a model loaded in memory or make it unload immediately?
+## 如何让模型常驻内存,或让它立即卸载?
 
-By default models are kept in memory for 5 minutes before being unloaded. This allows for quicker response times if you're making numerous requests to the LLM. If you want to immediately unload a model from memory, use the `ollama stop` command:
+默认情况下,模型会在内存中保留 5 分钟后卸载。这样在你向 LLM 连续发起大量请求时能获得更快的响应。如果想立即把模型从内存卸载,使用 `ollama stop` 命令:
 
 ```shell
 ollama stop llama3.2
 ```
 
-If you're using the API, use the `keep_alive` parameter with the `/api/generate` and `/api/chat` endpoints to set the amount of time that a model stays in memory. The `keep_alive` parameter can be set to:
+使用 API 时,可以在 `/api/generate` 和 `/api/chat` 端点使用 `keep_alive` 参数,设置模型在内存中的保留时长。`keep_alive` 可设置为:
 
-- a duration string (such as "10m" or "24h")
-- a number in seconds (such as 3600)
-- any negative number which will keep the model loaded in memory (e.g. -1 or "-1m")
-- '0' which will unload the model immediately after generating a response
+- 时长字符串(如 "10m" 或 "24h")
+- 秒数(如 3600)
+- 任意负数,表示模型一直驻留内存(如 -1 或 "-1m")
+- '0',表示生成完响应后立即卸载模型
 
-For example, to preload a model and leave it in memory use:
+例如,预加载一个模型并让它常驻内存:
 
 ```shell
 curl http://localhost:11434/api/generate -d '{"model": "llama3.2", "keep_alive": -1}'
 ```
 
-To unload the model and free up memory use:
+卸载模型并释放内存:
 
 ```shell
 curl http://localhost:11434/api/generate -d '{"model": "llama3.2", "keep_alive": 0}'
 ```
 
-Alternatively, you can change the amount of time all models are loaded into memory by setting the `OLLAMA_KEEP_ALIVE` environment variable when starting the Ollama server. The `OLLAMA_KEEP_ALIVE` variable uses the same parameter types as the `keep_alive` parameter types mentioned above. Refer to the section explaining [how to configure the Ollama server](#how-do-i-configure-ollama-server) to correctly set the environment variable.
+另外,也可以在启动 Ollama 服务端时设置 `OLLAMA_KEEP_ALIVE` 环境变量,统一调整所有模型的内存保留时长。`OLLAMA_KEEP_ALIVE` 支持与上述 `keep_alive` 参数相同的取值类型。环境变量的正确设置方法请参阅[如何配置 Ollama 服务端](#如何配置-ollama-服务端)。
 
-The `keep_alive` API parameter with the `/api/generate` and `/api/chat` API endpoints will override the `OLLAMA_KEEP_ALIVE` setting.
+`/api/generate` 和 `/api/chat` 端点上的 `keep_alive` API 参数会覆盖 `OLLAMA_KEEP_ALIVE` 设置。
 
-## How do I manage the maximum number of requests the Ollama server can queue?
+## 如何管理 Ollama 服务端的最大排队请求数?
 
-If too many requests are sent to the server, it will respond with a 503 error indicating the server is overloaded. You can adjust how many requests may be queued by setting `OLLAMA_MAX_QUEUE`.
+如果发送到服务端的请求过多,服务端会返回 503 错误,表示已过载。可以通过设置 `OLLAMA_MAX_QUEUE` 调整可排队的请求数量。
 
-## How does Ollama handle concurrent requests?
+## Ollama 如何处理并发请求?
 
-Ollama supports two levels of concurrent processing. If your system has sufficient available memory (system memory when using CPU inference, or VRAM for GPU inference) then multiple models can be loaded at the same time. For a given model, if there is sufficient available memory when the model is loaded, it is configured to allow parallel request processing.
+Ollama 支持两个层级的并发处理。如果你的系统有足够的可用内存(CPU 推理用系统内存,GPU 推理用显存),就可以同时加载多个模型。对单个模型而言,如果加载时有足够的可用内存,它会被配置为允许并行处理请求。
 
-If there is insufficient available memory to load a new model request while one or more models are already loaded, all new requests will be queued until the new model can be loaded. As prior models become idle, one or more will be unloaded to make room for the new model. Queued requests will be processed in order. When using GPU inference new models must be able to completely fit in VRAM to allow concurrent model loads.
+如果可用内存不足以在已加载一个或多个模型的情况下再加载新模型,所有新请求都会排队,直到新模型可以加载。当先前的模型空闲时,会有一个或多个模型被卸载,为新模型腾出空间。排队的请求会按顺序处理。使用 GPU 推理时,新模型必须能完整放入显存,才允许并发加载多个模型。
 
-Parallel request processing for a given model results in increasing the context size by the number of parallel requests. For example, a 2K context with 4 parallel requests will result in an 8K context and additional memory allocation.
+对单个模型开启并行请求处理,会把上下文大小乘以并行请求数。例如,2K 上下文配 4 个并行请求,会得到 8K 的上下文和额外的内存分配。
 
-The following server settings may be used to adjust how Ollama handles concurrent requests on most platforms:
+大多数平台上,可用以下服务端设置调整 Ollama 处理并发请求的方式:
 
-- `OLLAMA_MAX_LOADED_MODELS` - The maximum number of models that can be loaded concurrently provided they fit in available memory. The default is 3 \* the number of GPUs or 3 for CPU inference.
-- `OLLAMA_NUM_PARALLEL` - The maximum number of parallel requests each model will process at the same time, default 1.  Required RAM will scale by `OLLAMA_NUM_PARALLEL` * `OLLAMA_CONTEXT_LENGTH`.
-- `OLLAMA_MAX_QUEUE` - The maximum number of requests Ollama will queue when busy before rejecting additional requests. The default is 512
+- `OLLAMA_MAX_LOADED_MODELS` - 在可用内存放得下的前提下,可并发加载的最大模型数。默认为 3 \* GPU 数量,CPU 推理时默认为 3。
+- `OLLAMA_NUM_PARALLEL` - 每个模型同时处理的最大并行请求数,默认 1。所需内存会按 `OLLAMA_NUM_PARALLEL` * `OLLAMA_CONTEXT_LENGTH` 扩展。
+- `OLLAMA_MAX_QUEUE` - Ollama 繁忙时在拒绝新请求前允许排队的最大请求数。默认为 512。
 
-Note: Windows with Radeon GPUs currently default to 1 model maximum due to limitations in ROCm v5.7 for available VRAM reporting. Once ROCm v6.2 is available, Windows Radeon will follow the defaults above. You may enable concurrent model loads on Radeon on Windows, but ensure you don't load more models than will fit into your GPU's VRAM.
+注意:由于 ROCm v5.7 在显存上报方面的限制,Radeon GPU 的 Windows 目前最多默认 1 个模型。待 ROCm v6.2 发布后,Windows Radeon 将遵循上述默认值。你可以在 Windows 的 Radeon 上启用并发模型加载,但请确保加载的模型数量不超过 GPU 显存容量。
 
-## How does Ollama load models on multiple GPUs?
+## Ollama 如何在多 GPU 上加载模型?
 
-When loading a new model, Ollama evaluates the required VRAM for the model against what is currently available. If the model will entirely fit on any single GPU, Ollama will load the model on that GPU. This typically provides the best performance as it reduces the amount of data transferring across the PCI bus during inference. If the model does not fit entirely on one GPU, then it will be spread across all the available GPUs.
+加载新模型时,Ollama 会把模型所需的显存与当前可用显存做比较。如果模型能完整放进任意单个 GPU,Ollama 就会把模型加载到该 GPU。这通常能带来最佳性能,因为它减少了推理期间跨 PCI 总线传输的数据量。如果模型无法完整放进单个 GPU,则会分摊到所有可用 GPU 上。
 
-## How can I enable Flash Attention?
+## 如何启用 Flash Attention?
 
-Flash Attention is a feature of most modern models that can significantly reduce memory usage as the context size grows. Ollama uses Flash Attention automatically when the selected backend and devices support it. To force Flash Attention on, set `OLLAMA_FLASH_ATTENTION=1` when starting the Ollama server. To disable it, set `OLLAMA_FLASH_ATTENTION=0`.
+Flash Attention 是大多数现代模型支持的特性,能随上下文规模增长显著降低内存占用。当所选后端和设备支持时,Ollama 会自动使用 Flash Attention。若要强制开启,启动 Ollama 服务端时设置 `OLLAMA_FLASH_ATTENTION=1`;要关闭则设 `OLLAMA_FLASH_ATTENTION=0`。
 
-## How can I set the quantization type for the K/V cache?
+## 如何设置 K/V cache 的量化类型?
 
-The K/V context cache can be quantized to significantly reduce memory usage when Flash Attention is enabled.
+在启用 Flash Attention 的前提下,对 K/V 上下文缓存做量化可以显著降低内存占用。
 
-To use quantized K/V cache with Ollama you can set the following environment variable:
+要在 Ollama 中使用量化 K/V cache,可设置以下环境变量:
 
-- `OLLAMA_KV_CACHE_TYPE` - The quantization type for the K/V cache. Default is `f16`.
+- `OLLAMA_KV_CACHE_TYPE` - K/V cache 的量化类型。默认为 `f16`。
 
 <Note>
-  Currently this is a global option - meaning all models will run with the
-  specified quantization type.
+  目前这是一个全局选项——即所有模型都会以指定的量化类型运行。
 </Note>
 
-The currently available K/V cache quantization types are:
+当前可用的 K/V cache 量化类型:
 
-- `f16` - high precision and memory usage (default).
-- `q8_0` - 8-bit quantization, uses approximately 1/2 the memory of `f16` with a very small loss in precision, this usually has no noticeable impact on the model's quality (recommended if not using f16).
-- `q4_0` - 4-bit quantization, uses approximately 1/4 the memory of `f16` with a small-medium loss in precision that may be more noticeable at higher context sizes.
+- `f16` - 高精度、高内存占用(默认)。
+- `q8_0` - 8 位量化,内存占用约为 `f16` 的 1/2,精度损失极小,通常对模型质量没有可感知的影响(不用 f16 时推荐)。
+- `q4_0` - 4 位量化,内存占用约为 `f16` 的 1/4,精度损失中小程度,在较大上下文下可能更明显。
 
-How much the cache quantization impacts the model's response quality will depend on the model and the task. Models that have a high GQA count (e.g. Qwen2) may see a larger impact on precision from quantization than models with a low GQA count.
+缓存量化对模型回答质量的影响程度取决于模型和任务。GQA 数量高的模型(如 Qwen2)受量化影响的精度损失可能比 GQA 数量低的模型更大。
 
-You may need to experiment with different quantization types to find the best balance between memory usage and quality.
+你可能需要尝试不同的量化类型,在内存占用与质量之间找到最佳平衡。
 
-## Where can I find my Ollama Public Key?
+## 在哪里可以找到我的 Ollama 公钥?
 
-Your **Ollama Public Key** is the public part of the key pair that lets your local Ollama instance talk to [ollama.com](https://ollama.com).
+**Ollama 公钥**是密钥对的公开部分,它让你的本地 Ollama 实例能与 [ollama.com](https://ollama.com) 通信。
 
-You'll need it to:
-* Push models to Ollama
-* Pull private models from Ollama to your machine
-* Run models hosted in [Ollama Cloud](https://ollama.com/cloud)
+以下场景需要用到它:
+* 向 Ollama 推送模型
+* 从 Ollama 拉取私有模型到本机
+* 运行 [Ollama Cloud](https://ollama.com/cloud) 上托管的模型
 
-### How to Add the Key
+### 如何添加密钥
 
-* **Sign-in via the Settings page** in the **Mac** and **Windows App**
+* 在 **Mac** 和 **Windows 应用**中通过 Settings 页面登录
 
-* **Sign‑in via CLI**
+* **通过 CLI 登录**
 
 ```shell
 ollama signin
 ```
 
-* **Manually copy & paste** the key on the **Ollama Keys** page:
+* 在 **Ollama Keys** 页面**手动复制粘贴**密钥:
 [https://ollama.com/settings/keys](https://ollama.com/settings/keys)
 
-### Where the Ollama Public Key lives
+### Ollama 公钥的位置
 
-| OS | Path to `id_ed25519.pub` |
+| 操作系统 | `id_ed25519.pub` 路径 |
 | :- | :- |
 | macOS 	| `~/.ollama/id_ed25519.pub`			|
 | Linux		| `/usr/share/ollama/.ollama/id_ed25519.pub`	|
 | Windows	| `C:\Users\<username>\.ollama\id_ed25519.pub`	|
 
 <Note>
-  Replace &lt;username&gt; with your actual Windows user name.
+  请把 &lt;username&gt; 替换为你实际的 Windows 用户名。
 </Note>
 
-## How can I stop Ollama from starting when I login to my computer?
+## 如何禁止 Ollama 随登录自动启动?
 
-Ollama for Windows and macOS register as a login item during installation.  You can disable this if you prefer not to have Ollama automatically start.  Ollama will respect this setting across upgrades, unless you uninstall the application.
+Windows 和 macOS 版 Ollama 在安装时会注册为登录启动项。如果你不希望 Ollama 自动启动,可以禁用它。除非卸载应用,否则 Ollama 在升级后会保留这一设置。
 
 **Windows**
-- In `Task Manager` go to the `Startup apps` tab, search for `ollama` then click `Disable`
+- 在`任务管理器`中进入`启动应用`选项卡,搜索 `ollama`,点击`禁用`
 
 **MacOS**
-- Open `Settings` and search for "Login Items", find the `Ollama` entry under `Allow in the Background`, then click the slider to disable.
+- 打开`设置`并搜索"登录项"(Login Items),在`允许在后台`下找到 `Ollama` 条目,点击开关将其禁用。
