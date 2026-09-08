@@ -1,25 +1,27 @@
-# Security
+> 🌐 本文档由 [ollama/ollama](https://github.com/ollama/ollama) 翻译,英文原版见原项目。
 
-The Ollama maintainer team takes security seriously and will actively work to resolve security issues.
+# 安全
 
-## Reporting a vulnerability
+Ollama 维护者团队高度重视安全问题,并将积极着手解决安全问题。
 
-If you discover a security vulnerability, please do not open a public issue. Instead, please report it by emailing hello@ollama.com. We ask that you give us sufficient time to investigate and address the vulnerability before disclosing it publicly.
+## 报告漏洞
 
-Please include the following details in your report:
-- A description of the vulnerability
-- Steps to reproduce the issue
-- Your assessment of the potential impact
-- Any possible mitigations
+如果你发现安全漏洞,请不要发起公开 issue,而应通过电子邮件 hello@ollama.com 进行报告。我们希望你给我们足够的时间调查并修复该漏洞,之后再进行公开披露。
 
-## Security best practices
+请在报告中包含以下信息:
+- 漏洞描述
+- 复现步骤
+- 你对潜在影响的评估
+- 可能的缓解措施
 
-While the maintainer team does its best to secure Ollama, users are encouraged to implement their own security best practices, such as:
+## 安全最佳实践
 
-- Regularly updating to the latest version of Ollama
-- Securing access to hosted instances of Ollama
-- Monitoring systems for unusual activity
+虽然维护者团队会尽力保障 Ollama 的安全,但我们仍建议用户自行落实安全最佳实践,例如:
 
-## Contact
+- 定期更新到最新版本的 Ollama
+- 保护好托管 Ollama 实例的访问权限
+- 监控系统中的异常活动
 
-For any other questions or concerns related to security, please contact us at hello@ollama.com
+## 联系方式
+
+如有其他与安全相关的疑问或顾虑,请通过 hello@ollama.com 联系我们。

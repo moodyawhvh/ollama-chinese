@@ -1,88 +1,79 @@
-# Contributing to Ollama
+> 🌐 本文档由 [ollama/ollama](https://github.com/ollama/ollama) 翻译,英文原版见原项目。
 
-Thank you for your interest in contributing to Ollama! Here are a few guidelines to help get you started.
+# 参与贡献 Ollama
 
-## Set up
+感谢你有兴趣为 Ollama 做贡献!下面是一些帮助你上手 contributor(贡献者)工作的指引。
 
-See the [development documentation](./docs/development.md) for instructions on how to build and run Ollama locally.
+## 环境准备
 
-### Ideal issues
+请参阅[开发文档](./docs/development.md),了解如何在本地构建和运行 Ollama。
 
-* [Bugs](https://github.com/ollama/ollama/issues?q=is%3Aissue+is%3Aopen+label%3Abug): issues where Ollama stops working or where it results in an unexpected error.
-* [Performance](https://github.com/ollama/ollama/issues?q=is%3Aissue+is%3Aopen+label%3Aperformance): issues to make Ollama faster at model inference, downloading or uploading.
-* [Security](https://github.com/ollama/ollama/blob/main/SECURITY.md): issues that could lead to a security vulnerability. As mentioned in [SECURITY.md](https://github.com/ollama/ollama/blob/main/SECURITY.md), please do not disclose security vulnerabilities publicly.
+### 受欢迎的 issue
 
-### Issues that are harder to review
+* [Bug](https://github.com/ollama/ollama/issues?q=is%3Aissue+is%3Aopen+label%3Abug):Ollama 停止工作或出现意外错误的问题。
+* [性能](https://github.com/ollama/ollama/issues?q=is%3Aissue+is%3Aopen+label%3Aperformance):让 Ollama 在模型推理、下载或上传方面更快的问题。
+* [安全](https://github.com/ollama/ollama/blob/main/SECURITY.md):可能引发安全漏洞的问题。如 [SECURITY.md](https://github.com/ollama/ollama/blob/main/SECURITY.md) 所述,请勿公开披露安全漏洞。
 
-* New features: new features (e.g. API fields, environment variables) add surface area to Ollama and make it harder to maintain in the long run as they cannot be removed without potentially breaking users in the future.
-* Refactoring: large code improvements are important, but can be harder or take longer to review and merge.
-* Documentation: small updates to fill in or correct missing documentation are helpful, however large documentation additions can be hard to maintain over time.
+### 较难审查的贡献
 
-### Issues that may not be accepted
+* 新功能:新功能(例如 API 字段、环境变量)会增加 Ollama 的表面积,长期维护难度更大,因为将来一旦移除它们,可能会破坏现有用户的使用。
+* 重构:大型代码改进固然重要,但审查和合并起来可能更困难、更耗时。
+* 文档:补充或修正缺失文档的小幅更新很有帮助,但大规模的文档新增在长期维护上会很吃力。
 
-* Changes that break backwards compatibility in Ollama's API (including the OpenAI-compatible API)
-* Changes that add significant friction to the user experience
-* Changes that create a large future maintenance burden for maintainers and contributors
+### 可能不会被接受的改动
 
-## Proposing a (non-trivial) change
+* 破坏 Ollama API(包括 OpenAI 兼容 API)向后兼容性的改动
+* 给用户体验带来明显阻力的改动
+* 给维护者和贡献者带来巨大未来维护负担的改动
 
-> By "non-trivial", we mean a change that is not a bug fix or small
-> documentation update. If you are unsure, please ask us on our [Discord
-> server](https://discord.gg/ollama).
+## 提议一个(非琐碎的)改动
 
-Before opening a non-trivial Pull Request, please open an issue to discuss the change and
-get feedback from the maintainers. This helps us understand the context of the
-change and how it fits into Ollama's roadmap and prevents us from duplicating
-work or you from spending time on a change that we may not be able to accept.
+> 所谓"非琐碎",指的是不属于 bug 修复或小幅文档更新的改动。如果你不确定,请到我们的 [Discord 服务器](https://discord.gg/ollama)上询问。
 
-Tips for proposals:
+在发起非琐碎的 Pull Request 之前,请先开一个 issue 讨论该改动并听取维护者的反馈。这能帮助我们理解改动的背景、以及它如何契合 Ollama 的路线图,避免重复劳动,也免得你把时间花在一个我们可能无法接受的改动上。
 
-* Explain the problem you are trying to solve, not what you are trying to do.
-* Explain why the change is important.
-* Explain how the change will be used.
-* Explain how the change will be tested.
+提案小技巧:
 
-Additionally, for bonus points: Provide draft documentation you would expect to
-see if the changes were accepted.
+* 说明你要解决的问题,而不是你想做的事情。
+* 说明这个改动为什么重要。
+* 说明这个改动将如何被使用。
+* 说明这个改动将如何被测试。
 
-## Pull requests
+另外,加分项:提供一份你预期在该改动被接受后会出现的文档草稿。
 
-**Commit messages**
+## Pull Request
 
-The title should look like:
+**Commit 提交信息**
 
-    <package>: <short description>
+标题格式应为:
 
-The package is the most affected Go package. If the change does not affect Go
-code, then use the directory name instead. Changes to a single well-known
-file in the root directory may use the file name.
+    <包名>: <简短描述>
 
-The short description should start with a lowercase letter and be a
-continuation of the sentence:
+包名指受影响最大的 Go 包。如果改动不涉及 Go 代码,则改用目录名。针对根目录下某个知名单文件的改动,可以使用文件名。
 
-      "This changes Ollama to..."
+简短描述应以小写字母开头,并能接续下面这句话:
 
-Examples:
+      "This changes Ollama to..."(这个改动让 Ollama ……)
+
+示例:
 
       llm/backend/mlx: support the llama architecture
       CONTRIBUTING: provide clarity on good commit messages, and bad
 
-Bad Examples:
+反面示例:
 
       feat: add more emoji
       fix: was not using famous web framework
       chore: generify code
 
-**Tests**
+**测试**
 
-Please include tests. Strive to test behavior, not implementation.
+请附带测试。尽量测试行为,而不是测试实现细节。
 
-**New dependencies**
+**新增依赖**
 
-Dependencies should be added sparingly. If you are adding a new dependency,
-please explain why it is necessary and what other ways you attempted that
-did not work without it.
+依赖应当克制地添加。如果你要引入新依赖,请说明它的必要性,以及你尝试过哪些不依赖它也能行得通的替代方案。
 
-## Need help?
+## 需要帮助?
 
-If you need help with anything, feel free to reach out to us on our [Discord server](https://discord.gg/ollama).
+有任何问题,欢迎到我们的 [Discord 服务器](https://discord.gg/ollama)上联系我们。
