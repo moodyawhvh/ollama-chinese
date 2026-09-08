@@ -1,58 +1,60 @@
 ---
-title: CLI Reference
+title: CLI 参考
 ---
 
-### Run a model
+> 🌐 本文档由 [ollama/ollama](https://github.com/ollama/ollama) 翻译,英文原版见原项目。
+
+### 运行模型
 
 ```
 ollama run gemma4
 ```
 
-### Launch integrations
+### 启动集成
 
 ```
 ollama launch
 ```
 
-Configure and launch external applications to use Ollama models. This provides an interactive way to set up and start integrations with supported apps.
+配置并启动外部应用来使用 Ollama 模型。这提供了一种交互式方式,设置并启动与受支持应用的集成。
 
-#### Supported integrations
+#### 受支持的集成
 
-- **OpenCode** - Open-source coding assistant
-- **Claude Code** - Anthropic's agentic coding tool
-- **Codex** - OpenAI's coding assistant
-- **VS Code** - Microsoft's IDE with built-in AI chat
-- **Droid** - Factory's AI coding agent
+- **OpenCode** - 开源编码助手
+- **Claude Code** - Anthropic 的智能体编码工具
+- **Codex** - OpenAI 的编码助手
+- **VS Code** - 微软的 IDE,内置 AI 对话
+- **Droid** - Factory 的 AI 编码智能体
 
-#### Examples
+#### 示例
 
-Launch an integration interactively:
+交互式启动一个集成:
 
 ```
 ollama launch
 ```
 
-Launch a specific integration:
+启动指定的集成:
 
 ```
 ollama launch claude
 ```
 
-Launch with a specific model:
+使用指定模型启动:
 
 ```
 ollama launch claude --model qwen3.5
 ```
 
-Configure without launching:
+只配置、不启动:
 
 ```
 ollama launch droid --config
 ```
 
-#### Multiline input
+#### 多行输入
 
-For multiline input, you can wrap text with `"""`:
+多行输入可以用 `"""` 包裹文本:
 
 ```
 >>> """Hello,
@@ -61,85 +63,85 @@ For multiline input, you can wrap text with `"""`:
 I'm a basic program that prints the famous "Hello, world!" message to the console.
 ```
 
-#### Multimodal models
+#### 多模态模型
 
 ```
 ollama run gemma4 "What's in this image? /Users/jmorgan/Desktop/smile.png"
 ```
 
-### Generate embeddings
+### 生成嵌入(embeddings)
 
 ```
 ollama run embeddinggemma "Hello world"
 ```
 
-Output is a JSON array:
+输出是一个 JSON 数组:
 
 ```
 echo "Hello world" | ollama run nomic-embed-text
 ```
 
-### Download a model
+### 下载模型
 
 ```
 ollama pull gemma4
 ```
 
-### Remove a model
+### 删除模型
 
 ```
 ollama rm gemma4
 ```
 
-### List models
+### 列出模型
 
 ```
 ollama ls
 ```
 
-### Sign in to Ollama
+### 登录 Ollama
 
 ```
 ollama signin
 ```
 
-### Sign out of Ollama
+### 退出 Ollama 登录
 
 ```
 ollama signout
 ```
 
-### Create a customized model
+### 创建自定义模型
 
-First, create a `Modelfile`
+首先,创建一个 `Modelfile`
 
 ```
 FROM gemma4
 SYSTEM """You are a happy cat."""
 ```
 
-Then run `ollama create`:
+然后运行 `ollama create`:
 
 ```
 ollama create -f Modelfile
 ```
 
-### List running models
+### 列出运行中的模型
 
 ```
 ollama ps
 ```
 
-### Stop a running model
+### 停止运行中的模型
 
 ```
 ollama stop gemma4
 ```
 
-### Start Ollama
+### 启动 Ollama
 
 ```
 ollama serve
 ```
 
-To view a list of environment variables that can be set run `ollama serve --help`
+运行 `ollama serve --help` 可查看可设置的环境变量列表。

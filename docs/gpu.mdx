@@ -1,15 +1,17 @@
 ---
-title: Hardware support
+title: 硬件支持
 ---
 
-## Nvidia
-Ollama supports Nvidia GPUs with compute capability 5.0+ and driver version 550 and newer.
-Nvidia GPUs with compute capability 5.0 through 6.2 require driver version 570 or newer.
+> 🌐 本文档由 [ollama/ollama](https://github.com/ollama/ollama) 翻译,英文原版见原项目。
 
-Check your compute compatibility to see if your card is supported:
+## Nvidia
+Ollama 支持计算能力 5.0+ 且驱动版本 550 及更新的 Nvidia GPU。
+计算能力 5.0 到 6.2 的 Nvidia GPU 需要驱动版本 570 或更新。
+
+查看你的计算兼容性,确认显卡是否受支持:
 [https://developer.nvidia.com/cuda-gpus](https://developer.nvidia.com/cuda-gpus)
 
-| Compute Capability | Family              | Cards                                                                                                                          |
+| 计算能力 | 系列                | 显卡                                                                                                                           |
 | ------------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | 12.1               | NVIDIA              | `GB10 (DGX Spark)`                                                                                                             |
 | 12.0               | GeForce RTX 50xx    | `RTX 5060` `RTX 5060 Ti` `RTX 5070` `RTX 5070 Ti` `RTX 5080` `RTX 5090`                                                        |
@@ -35,73 +37,53 @@ Check your compute compatibility to see if your card is supported:
 | 5.0                | GeForce GTX         | `GTX 750 Ti` `GTX 750` `NVS 810`                                                                                               |
 |                    | Quadro              | `K2200` `K1200` `K620` `M1200` `M520` `M5000M` `M4000M` `M3000M` `M2000M` `M1000M` `K620M` `M600M` `M500M`                     |
 
-For building locally to support older GPUs, see [development](./development.md).
+要在本地构建以支持更老的 GPU,参见[开发文档](./development.md)。
 
-### GPU Selection
+### GPU 选择
 
-If you have multiple NVIDIA GPUs in your system and want to limit Ollama to use
-a subset, you can set `CUDA_VISIBLE_DEVICES` to a comma separated list of GPUs.
-Numeric IDs may be used, however ordering may vary, so UUIDs are more reliable.
-You can discover the UUID of your GPUs by running `nvidia-smi -L` If you want to
-ignore the GPUs and force CPU usage, use an invalid GPU ID (e.g., "-1")
+如果你的系统里有多块 NVIDIA GPU,想让 Ollama 只使用其中一部分,可以把 `CUDA_VISIBLE_DEVICES` 设为逗号分隔的 GPU 列表。可以使用数字 ID,但顺序可能变化,因此 UUID 更可靠。运行 `nvidia-smi -L` 可以查看 GPU 的 UUID。如果想忽略 GPU、强制使用 CPU,可填一个无效的 GPU ID(如 "-1")。
 
-### Linux Suspend Resume
+### Linux 休眠恢复
 
-On linux, after a suspend/resume cycle, sometimes Ollama will fail to discover
-your NVIDIA GPU, and fallback to running on the CPU. You can workaround this
-driver bug by reloading the NVIDIA UVM driver with `sudo rmmod nvidia_uvm &&
-sudo modprobe nvidia_uvm`
+在 Linux 上,经过一次挂起/恢复循环后,Ollama 有时会找不到你的 NVIDIA GPU,从而回退到 CPU 运行。可以通过重载 NVIDIA UVM 驱动绕过这个驱动 bug:`sudo rmmod nvidia_uvm && sudo modprobe nvidia_uvm`
 
 ## AMD Radeon
 
-Ollama supports the following AMD GPUs via the ROCm library:
+Ollama 通过 ROCm 库支持以下 AMD GPU:
 
-> **NOTE:**
-> Additional AMD GPU support is provided by the Vulkan Library - see below.
+> **注意:**
+> 更多 AMD GPU 可通过 Vulkan 库获得支持——见下文。
 
 
-### Linux Support
+### Linux 支持
 
-Ollama requires the AMD ROCm v7 driver on Linux. You can install or upgrade
-using the `amdgpu-install` utility from
-[AMD's ROCm documentation](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/).
+在 Linux 上,Ollama 要求 AMD ROCm v7 驱动。可以使用 [AMD ROCm 文档](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/)中的 `amdgpu-install` 工具安装或升级。
 
-| Family         | Cards and accelerators                                                                                                                                         |
+| 系列           | 显卡与加速器                                                                                                                                                    |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | AMD Radeon RX  | `9070 XT` `9070 GRE` `9070` `9060 XT` `9060 XT LP` `9060` `7900 XTX` `7900 XT` `7900 GRE` `7800 XT` `7700 XT` `7700` `7600 XT` `7600` `6950 XT` `6900 XTX` `6900XT` `6800 XT` `6800` |
 | AMD Radeon AI PRO | `R9700` `R9600D`                                                                                                                                            |
 | AMD Radeon PRO | `W7900` `W7800` `W7700` `W7600` `W7500` `W6900X` `W6800X Duo` `W6800X` `W6800` `V620`                                                                        |
 | AMD Ryzen AI   | `Ryzen AI Max+ 395` `Ryzen AI Max 390` `Ryzen AI Max 385` `Ryzen AI 9 HX 475` `Ryzen AI 9 HX 470` `Ryzen AI 9 465` `Ryzen AI 9 HX 375` `Ryzen AI 9 HX 370` `Ryzen AI 9 365` |
-| AMD Instinct   | `MI350X` `MI300X` `MI300A` `MI250X` `MI250` `MI210` `MI100`                                                                                                   |
+| AMD Instinct   | `MI350X` `MI300X` `MI300A` `MI250X` `MI250` `MI210` `MI100`                                                                                                    |
 
-### Windows Support
+### Windows 支持
 
-Ollama requires an AMD ROCm v7 / HIP7-capable driver stack on Windows.
+在 Windows 上,Ollama 要求具备 AMD ROCm v7 / HIP7 能力的驱动栈。
 
-| Family         | Cards and accelerators                                                                                               |
+| 系列           | 显卡与加速器                                                                                                           |
 | -------------- | -------------------------------------------------------------------------------------------------------------------- |
 | AMD Radeon RX  | `7900 XTX` `7900 XT` `7900 GRE` `7800 XT` `7700 XT` `7600 XT` `7600`  |
 | AMD Radeon PRO | `W7900` `W7800` `W7700` `W7600` `W7500`                                |
 
-### Overrides on Linux
+### Linux 上的覆盖(Override)
 
-Ollama leverages the AMD ROCm library, which does not support all AMD GPUs. In
-some cases you can force the system to try to use a similar LLVM target that is
-close. For example The Radeon RX 5400 is `gfx1034` (also known as 10.3.4)
-however, ROCm does not currently support this target. The closest support is
-`gfx1030`. You can use the environment variable `HSA_OVERRIDE_GFX_VERSION` with
-`x.y.z` syntax. So for example, to force the system to run on the RX 5400, you
-would set `HSA_OVERRIDE_GFX_VERSION="10.3.0"` as an environment variable for the
-server. If you have an unsupported AMD GPU you can experiment using the list of
-supported types below.
+Ollama 使用的 AMD ROCm 库并不支持所有 AMD GPU。某些情况下,你可以强制系统尝试使用一个相近的 LLVM target。例如,Radeon RX 5400 是 `gfx1034`(即 10.3.4),但 ROCm 目前不支持该 target,最接近的支持是 `gfx1030`。你可以使用 `x.y.z` 语法的环境变量 `HSA_OVERRIDE_GFX_VERSION`。例如,要强制系统在 RX 5400 上运行,就把服务端的环境变量设为 `HSA_OVERRIDE_GFX_VERSION="10.3.0"`。如果你的 AMD GPU 不受支持,可以参照下方支持类型列表做实验。
 
-If you have multiple GPUs with different GFX versions, append the numeric device
-number to the environment variable to set them individually. For example,
-`HSA_OVERRIDE_GFX_VERSION_0=10.3.0` and `HSA_OVERRIDE_GFX_VERSION_1=11.0.0`
+如果你有多块 GFX 版本不同的 GPU,可以在环境变量后追加数字设备编号来分别设置。例如 `HSA_OVERRIDE_GFX_VERSION_0=10.3.0` 和 `HSA_OVERRIDE_GFX_VERSION_1=11.0.0`。
 
-At this time, the known supported GPU types on linux are the following LLVM Targets.
-This table shows some example GPUs that map to these LLVM targets:
-| **LLVM Target** | **An Example GPU** |
+目前 Linux 上已知受支持的 GPU 类型对应以下 LLVM Target。下表列出了映射到这些 LLVM target 的部分示例 GPU:
+| **LLVM Target** | **示例 GPU** |
 |-----------------|---------------------|
 | gfx908 | Radeon Instinct MI100 |
 | gfx90a | Radeon Instinct MI210/MI250 |
@@ -116,61 +98,38 @@ This table shows some example GPUs that map to these LLVM targets:
 | gfx1200 | Radeon RX 9070 |
 | gfx1201 | Radeon RX 9070 XT |
 
-Reach out on [Discord](https://discord.gg/ollama) or file an
-[issue](https://github.com/ollama/ollama/issues) for additional help.
+如需更多帮助,可以在 [Discord](https://discord.gg/ollama) 上提问或提交 [issue](https://github.com/ollama/ollama/issues)。
 
-### GPU Selection
+### GPU 选择
 
-If you have multiple AMD GPUs in your system and want to limit Ollama to use a
-subset, you can set `ROCR_VISIBLE_DEVICES` to a comma separated list of GPUs.
-You can see the list of devices with `rocminfo`. If you want to ignore the GPUs
-and force CPU usage, use an invalid GPU ID (e.g., "-1"). When available, use the
-`Uuid` to uniquely identify the device instead of numeric value.
+如果你的系统里有多块 AMD GPU,想让 Ollama 只使用其中一部分,可以把 `ROCR_VISIBLE_DEVICES` 设为逗号分隔的 GPU 列表。用 `rocminfo` 可以查看设备列表。如果想忽略 GPU、强制使用 CPU,可填一个无效的 GPU ID(如 "-1")。在可用的情况下,请使用 `Uuid` 而不是数字值来唯一标识设备。
 
-### Container Permission
+### 容器权限
 
-In some Linux distributions, SELinux can prevent containers from
-accessing the AMD GPU devices. On the host system you can run
-`sudo setsebool container_use_devices=1` to allow containers to use devices.
+在某些 Linux 发行版上,SELinux 会阻止容器访问 AMD GPU 设备。可在宿主机上运行 `sudo setsebool container_use_devices=1`,允许容器使用设备。
 
-## Metal (Apple GPUs)
+## Metal(Apple GPU)
 
-Ollama supports GPU acceleration on Apple devices via the Metal API.
+Ollama 通过 Metal API 在 Apple 设备上支持 GPU 加速。
 
 
-## Vulkan GPU Support
+## Vulkan GPU 支持
 
-Additional GPU support on Windows and Linux is provided via
-[Vulkan](https://www.vulkan.org/). Vulkan is enabled by default when the
-backend is installed. On Windows most GPU vendors drivers come
-bundled with Vulkan support and require no additional setup steps. Most Linux
-distributions require installing additional components, and you may have
-multiple options for Vulkan drivers between Mesa and GPU Vendor specific packages
+Windows 和 Linux 上的额外 GPU 支持由 [Vulkan](https://www.vulkan.org/) 提供。后端安装后 Vulkan 默认启用。在 Windows 上,大多数 GPU 厂商的驱动都自带 Vulkan 支持,无需额外步骤。大多数 Linux 发行版需要安装额外组件,且 Vulkan 驱动可能有多种选择,包括 Mesa 和 GPU 厂商专用包:
 
-- Linux Intel GPU Instructions - https://dgpu-docs.intel.com/driver/client/overview.html
-- Linux AMD GPU Instructions - https://amdgpu-install.readthedocs.io/en/latest/install-script.html#specifying-a-vulkan-implementation
+- Linux Intel GPU 指引 - https://dgpu-docs.intel.com/driver/client/overview.html
+- Linux AMD GPU 指引 - https://amdgpu-install.readthedocs.io/en/latest/install-script.html#specifying-a-vulkan-implementation
 
-For AMD GPUs on some Linux distributions, you may need to add the `ollama` user to the `render` group.
+对某些 Linux 发行版上的 AMD GPU,你可能需要把 `ollama` 用户加入 `render` 组。
 
-The Ollama scheduler leverages available VRAM data reported by the GPU libraries to
-make optimal scheduling decisions.  Vulkan requires additional capabilities or
-running as root to expose this available VRAM data.  If neither root access or this
-capability are granted, Ollama will use approximate sizes of the models
-to make best effort scheduling decisions.
+Ollama 调度器会利用 GPU 库上报的可用显存数据来做最优调度决策。Vulkan 需要额外的能力(capability)或以 root 运行才能暴露可用显存数据。如果既没有 root 权限也没有该能力,Ollama 会用模型的近似大小来尽力做出调度决策。
 
 ```bash
 sudo setcap cap_perfmon+ep /usr/local/bin/ollama
 ```
 
-### GPU Selection
+### GPU 选择
 
-To select specific Vulkan GPU(s), you can set the environment variable
-`GGML_VK_VISIBLE_DEVICES` to one or more numeric IDs on the Ollama server as
-described in the [FAQ](faq#how-do-i-configure-ollama-server). If you
-encounter any problems with Vulkan based GPUs, you can disable all Vulkan GPUs
-by setting `OLLAMA_VULKAN=0` or `GGML_VK_VISIBLE_DEVICES=-1`.
+要选择特定的 Vulkan GPU,可以按 [FAQ](faq#how-do-i-configure-ollama-server) 所述,把 Ollama 服务端的环境变量 `GGML_VK_VISIBLE_DEVICES` 设为一个或多个数字 ID。如果 Vulkan GPU 出现问题,可以设置 `OLLAMA_VULKAN=0` 或 `GGML_VK_VISIBLE_DEVICES=-1` 禁用所有 Vulkan GPU。
 
-On mixed iGPU/dGPU systems where the Vulkan iGPU is unstable, keep Vulkan
-enabled and set `GGML_VK_VISIBLE_DEVICES` to the discrete GPU index. For
-example, use `GGML_VK_VISIBLE_DEVICES=1` when `Vulkan1` is the discrete
-GPU.
+在 iGPU/dGPU 混合系统上,如果 Vulkan iGPU 不稳定,保持 Vulkan 启用,并把 `GGML_VK_VISIBLE_DEVICES` 设为独立显卡的索引。例如,当 `Vulkan1` 是独立 GPU 时,使用 `GGML_VK_VISIBLE_DEVICES=1`。
